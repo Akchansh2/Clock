@@ -1,23 +1,54 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aesthetic Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <button id="toggleMode" class="toggle-btn">🌙</button>
 
-    <button id="toggleFormat" class="format-btn">24H</button>
+    <!-- Top Controls -->
+    <div class="top-bar">
+      <button id="toggleFormat" class="format-btn">12H</button>
+      <div id="ampm-badge" class="ampm-badge">AM</div>
+    </div>
 
+    <!-- Theme Picker -->
+    <div class="theme-picker">
+      <div class="dot active" data-theme="light"    title="Light"></div>
+      <div class="dot"        data-theme="dark"     title="Dark"></div>
+      <div class="dot"        data-theme="cyber"    title="Cyber"></div>
+      <div class="dot"        data-theme="luxury"   title="Luxury"></div>
+      <div class="dot"        data-theme="matrix"   title="Matrix"></div>
+    </div>
+
+    <!-- Main Clock -->
     <div class="container">
       <div class="date" id="date"></div>
 
       <div class="clock">
-        <div class="time-box" id="hour">00</div>
-        <div class="time-box" id="minute">00</div>
-        <div class="time-box" id="second">00</div>
+        <div class="time-unit">
+          <div class="time-box" id="hour">00</div>
+          <div class="unit-label">HR</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="time-unit">
+          <div class="time-box" id="minute">00</div>
+          <div class="unit-label">MIN</div>
+        </div>
+        <div class="separator">:</div>
+        <div class="time-unit">
+          <div class="time-box" id="second">00</div>
+          <div class="unit-label">SEC</div>
+        </div>
+      </div>
+
+      <!-- Seconds progress bar -->
+      <div class="sec-bar-wrap">
+        <div id="sec-bar"></div>
       </div>
     </div>
 
