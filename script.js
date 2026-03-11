@@ -1,88 +1,69 @@
+// ── STATE ──
+let use12h = true;
 
+// ── HELPERS ──
+const pad = n => String(n).padStart(2, '0');
 
-const hourEl = document.getElementById("hour");
-const minuteEl = document.getElementById("minute");
-const secondEl = document.getElementById("second");
-const dateEl = document.getElementById("date");
+const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-const toggleThemeBtn = document.getElementById("toggleMode");
-const toggleFormatBtn = document.getElementById("toggleFormat");
+// ── TICK ──
+function tick() {
+  const now  = new Date();
+  let   h    = now.getHours();
+  const m    = now.getMinutes();
+  const s    = now.getSeconds();
+  const ampm = h >= 12 ? 'PM' : 'AM';
 
+  if (use12h) h = h % 12 || 12;
 
+  setBox('hour',   pad(h));
+  setBox('minute', pad(m));
+  setBox('second', pad(s));
 
-let isDarkMode = localStorage.getItem("theme") === "dark";
-let is24Hour = localStorage.getItem("timeFormat") !== "12"; // default 24h
+  // AM/PM badge
+  const badge = document.getElementById('ampm-badge');
+  badge.textContent = ampm;
+  badge.style.display = use12h ? 'inline-block' : 'none';
 
-applyPreferences();
+  // Date
+  document.getElementById('date').textContent =
+    `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
 
-
-function updateClock() {
-  const now = new Date();
-
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
-  let seconds = now.getSeconds();
-
-  let ampm = "";
-
-  if (!is24Hour) {
-    ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12;
-  }
-
-  hourEl.textContent = formatTime(hours);
-  minuteEl.textContent = formatTime(minutes);
-  secondEl.textContent = formatTime(seconds);
-
-  const dateOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  };
-
-
-  dateEl.textContent = now.toLocaleDateString(undefined, dateOptions);
-
-
- 
+  // Seconds progress bar
+  document.getElementById('sec-bar').style.width = ((s / 59) * 100) + '%';
 }
 
+// ── SET BOX WITH FADE ──
+function setBox(id, value) {
+  const el = document.getElementById(id);
+  if (el.textContent === value) return; // no change, skip animation
 
-
-function formatTime(value) {
-  return value < 10 ? "0" + value : value;
+  el.classList.add('fade-out');
+  setTimeout(() => {
+    el.textContent = value;
+    el.classList.remove('fade-out');
+    el.classList.add('fade-in');
+    setTimeout(() => el.classList.remove('fade-in'), 250);
+  }, 200);
 }
 
-
-
-toggleThemeBtn.addEventListener("click", () => {
-  isDarkMode = !isDarkMode;
-
-  document.body.classList.toggle("dark", isDarkMode);
-  toggleThemeBtn.textContent = isDarkMode ? "☀️" : "🌙";
-
-  localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+// ── FORMAT TOGGLE ──
+document.getElementById('toggleFormat').addEventListener('click', function () {
+  use12h = !use12h;
+  this.textContent = use12h ? '12H' : '24H';
+  tick();
 });
 
-
-
-toggleFormatBtn.addEventListener("click", () => {
-  is24Hour = !is24Hour;
-
-  toggleFormatBtn.textContent = is24Hour ? "24H" : "12H";
-  localStorage.setItem("timeFormat", is24Hour ? "24" : "12");
-
-  updateClock();
+// ── THEME SWITCHER ──
+document.querySelectorAll('.dot').forEach(dot => {
+  dot.addEventListener('click', function () {
+    document.documentElement.setAttribute('data-theme', this.dataset.theme);
+    document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+    this.classList.add('active');
+  });
 });
 
-
-function applyPreferences() {
-  document.body.classList.toggle("dark", isDarkMode);
-  toggleThemeBtn.textContent = isDarkMode ? "☀️" : "🌙";
-  toggleFormatBtn.textContent = is24Hour ? "24H" : "12H";
-}
-
-
-updateClock();
-setInterval(updateClock, 1000);
+// ── INIT ──
+tick();
+setInterval(tick, 1000);
