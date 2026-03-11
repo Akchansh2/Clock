@@ -1,114 +1,299 @@
-:root {
-    --bg: #fffbf1;
-    --text: #000;
-    --box: #000;
-    --box-text: #fff;
+/* ── THEMES ── */
+:root, [data-theme="light"] {
+  --bg: #f5f0e8;
+  --surface: #fffdf6;
+  --border: #d8d0be;
+  --text: #2c2416;
+  --box-bg: #2c2416;
+  --box-text: #f5f0e8;
+  --accent: #c0392b;
+  --accent2: #2980b9;
+  --date-color: #8a7a60;
+  --label-color: #aaa090;
+  --btn-bg: rgba(0,0,0,0.08);
+  --btn-text: #666;
+  --sep-color: #bbb;
+  --bar-bg: #e0d8c8;
+  --glow: 0 8px 40px rgba(0,0,0,0.12);
+  --font-clock: 'DM Serif Display', serif;
 }
 
-body.dark {
-    --bg: #121212;
-    --text: #fff;
-    --box: #fff;
-    --box-text: #000;
+[data-theme="dark"] {
+  --bg: #121212;
+  --surface: #1e1e1e;
+  --border: #2a2a2a;
+  --text: #ffffff;
+  --box-bg: #ffffff;
+  --box-text: #121212;
+  --accent: #7b6cff;
+  --accent2: #ff6cb0;
+  --date-color: #888;
+  --label-color: #555;
+  --btn-bg: rgba(255,255,255,0.08);
+  --btn-text: #999;
+  --sep-color: #444;
+  --bar-bg: #2a2a2a;
+  --glow: 0 8px 40px rgba(0,0,0,0.5);
+  --font-clock: 'DM Serif Display', serif;
 }
 
+[data-theme="cyber"] {
+  --bg: #000a0f;
+  --surface: #001520;
+  --border: #004466;
+  --text: #00ffe7;
+  --box-bg: #001a28;
+  --box-text: #00ffe7;
+  --accent: #00ffe7;
+  --accent2: #ff6600;
+  --date-color: #007799;
+  --label-color: #005566;
+  --btn-bg: rgba(0,255,231,0.08);
+  --btn-text: #007799;
+  --sep-color: #004466;
+  --bar-bg: #001a28;
+  --glow: 0 0 40px rgba(0,255,231,0.2);
+  --font-clock: 'Share Tech Mono', monospace;
+}
+
+[data-theme="luxury"] {
+  --bg: #0c0900;
+  --surface: #1a1400;
+  --border: #4a3800;
+  --text: #f5d96b;
+  --box-bg: #1f1800;
+  --box-text: #f5d96b;
+  --accent: #f5d96b;
+  --accent2: #ff9944;
+  --date-color: #7a6020;
+  --label-color: #5a4515;
+  --btn-bg: rgba(245,217,107,0.08);
+  --btn-text: #7a6020;
+  --sep-color: #4a3800;
+  --bar-bg: #1f1800;
+  --glow: 0 0 40px rgba(245,217,107,0.15);
+  --font-clock: 'Orbitron', monospace;
+}
+
+[data-theme="matrix"] {
+  --bg: #000300;
+  --surface: #000800;
+  --border: #003300;
+  --text: #00ff41;
+  --box-bg: #000d00;
+  --box-text: #00ff41;
+  --accent: #00ff41;
+  --accent2: #39ff14;
+  --date-color: #006600;
+  --label-color: #004400;
+  --btn-bg: rgba(0,255,65,0.08);
+  --btn-text: #006600;
+  --sep-color: #003300;
+  --bar-bg: #001000;
+  --glow: 0 0 40px rgba(0,255,65,0.15);
+  --font-clock: 'Share Tech Mono', monospace;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── BODY ── */
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    transition: 0.3s ease;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.4s ease, color 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.container {
-    text-align: center;
+/* subtle grid bg */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.12;
+  pointer-events: none;
+  transition: opacity 0.4s;
 }
 
-.date {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    letter-spacing: 1px;
+/* ── TOP BAR ── */
+.top-bar {
+  position: fixed;
+  top: 20px; right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.clock {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.time-box {
-    background: var(--box);
-    color: var(--box-text);
-    width: 120px;
-    height: 120px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    transition: 0.3s ease;
-}
-
-.toggle-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    border: none;
-    background: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
 .format-btn {
-    position: absolute;
-    top: 20px;
-    right: 70px;
-
-    border: none;
-    border-radius: 20px;
-    padding: 8px 15px;
-
-    backdrop-filter: blur(10px);
-    background: rgba(0, 0, 0, 0.1);
-    /* works for light mode */
-
-    color: rgb(148, 148, 148);
-    /* default light mode text */
-    cursor: pointer;
-    transition: 0.3s ease;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
-.time-box {
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.fade-out {
-    opacity: 0;
-    transform: translateY(-8px);
-}
-
-.fade-in {
-    opacity: 1;
-    transform: translateY(0);
-}
-.toggle-btn:hover,
 .format-btn:hover {
-    transform: scale(1.05);
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.05);
 }
 
-/* 📱 Responsive */
-@media (max-width: 600px) {
-    .time-box {
-        width: 80px;
-        height: 80px;
-        font-size: 1.5rem;
-    }
+.ampm-badge {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 6px;
+  padding: 4px 10px;
+  transition: all 0.3s;
+}
 
-    .date {
-        font-size: 1rem;
-    }
+/* ── THEME PICKER ── */
+.theme-picker {
+  position: fixed;
+  top: 20px; left: 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.dot:hover { transform: scale(1.2); }
+.dot.active { border-color: var(--text); transform: scale(1.15); }
+
+.dot[data-theme="light"]  { background: radial-gradient(circle at 35% 35%, #fffdf6, #d8d0be); }
+.dot[data-theme="dark"]   { background: radial-gradient(circle at 35% 35%, #7b6cff, #1e1e1e); }
+.dot[data-theme="cyber"]  { background: radial-gradient(circle at 35% 35%, #00ffe7, #001520); }
+.dot[data-theme="luxury"] { background: radial-gradient(circle at 35% 35%, #f5d96b, #1a1400); }
+.dot[data-theme="matrix"] { background: radial-gradient(circle at 35% 35%, #00ff41, #000800); }
+
+/* ── CONTAINER ── */
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── DATE ── */
+.date {
+  font-size: 0.85rem;
+  letter-spacing: 4px;
+  color: var(--date-color);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  transition: color 0.4s;
+}
+
+/* ── CLOCK ROW ── */
+.clock {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.separator {
+  font-family: var(--font-clock);
+  font-size: 2.5rem;
+  color: var(--sep-color);
+  margin-bottom: 20px;
+  animation: blink 1s step-end infinite;
+  transition: color 0.4s;
+}
+@keyframes blink { 50% { opacity: 0.15; } }
+
+/* ── TIME UNIT ── */
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-box {
+  background: var(--box-bg);
+  color: var(--box-text);
+  width: 120px;
+  height: 120px;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-clock);
+  font-size: 2.8rem;
+  font-weight: 700;
+  box-shadow: var(--glow);
+  border: 1px solid var(--border);
+  transition: background 0.4s, color 0.4s, box-shadow 0.4s, font-family 0.3s, opacity 0.25s ease, transform 0.25s ease;
+}
+
+.unit-label {
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  color: var(--label-color);
+  text-transform: uppercase;
+  transition: color 0.4s;
+}
+
+/* ── FADE ANIMATION ── */
+.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── SECONDS BAR ── */
+.sec-bar-wrap {
+  width: 380px;
+  max-width: 90vw;
+  height: 3px;
+  background: var(--bar-bg);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+#sec-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  transition: width 0.9s linear, background 0.4s;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .time-box {
+    width: 80px;
+    height: 80px;
+    font-size: 1.8rem;
+  }
+  .date { font-size: 0.75rem; letter-spacing: 2px; }
+  .separator { font-size: 1.8rem; }
+  .sec-bar-wrap { width: 280px; }
 }
